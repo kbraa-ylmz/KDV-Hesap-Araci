@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html lang="tr">
+
+<head>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <link rel="stylesheet" href="kdv.css">
+    <link rel="stylesheet" href="ui-choose.css">
+    
+
+  <link href="http://www.jqueryscript.net/css/jquerysctipttop.css" rel="stylesheet" type="text/css">
+</head>
+
+<body>
+    
+        <div class="container" style="background-color:rgb(29, 31, 34);">
+
+            <div class="row1" style="background-color:rgb(29, 31, 34);">
+                <div class="col" style="background-color:rgb(29, 31, 34);">
+                    <h1 class="baslik" style="color:rgb(114, 255, 71) ;">KDV Hesaplama Aracı</h1>
+                </div>
+                <div class="altbaslik" style="color:rgb(173, 181, 189) ;">
+                    <div>
+                        Katma değer vergisini en kolay şekilde hesaplayabilmeniz için aşağıdaki KDV hesaplama aracını
+                        kullanabilirsiniz.
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-6 " style="background-color:rgb(29, 31, 34);">
+                        <div class="form-check">
+                            <input class="form-check-input" type="radio" value="Dahil" name="flexRadioDefault"
+                                onclick="textChange(this)" id="dahil">
+                            <label class="form-check-label" for="dahil" style="color: rgb(255, 255, 255);">
+                                KDV Dahil Tutardan KDV Hariç Tutar Hesapla
+                            </label>
+                        </div>
+                        <div class="form-check">
+                            <input class="form-check-input" type="radio" value="Haric" name="flexRadioDefault" id="haric"
+                                onclick="textChange(this)" checked>
+                            <label class="form-check-label" for="haric" style="color: rgb(255, 255, 255);">
+                                KDV Hariç Tutardan KDV Dahil Tutar Hesapla
+                            </label>
+                        </div><br><br>
+
+                        <div class="row">
+                            <div class="col degisken1" style="color: rgb(255, 255, 255);">KDV Hariç Tutar</div>
+                            <div class="row">
+                                <div class="col degisken2">
+                                    <input type="text"  oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*?)\..*/g, '$1');"  id="intValue" inputmode="decimal" class="text" value="0"></div>
+                            </div><br><br>
+
+                        </div>
+                        <div class="row">
+                            <div class="col" style="color: rgb(255, 255, 255);">KDV Miktarı</div>
+                        </div>
+                        <div class="row">
+                            <select class="ui-choose" id="uc_02"  >
+                                <option value="20">%20</option>
+                                <option value="10">%10</option>
+                                <option value="1">%1</option>
+                                <option value="diger">Diğer</option>
+                                
+                            </select>
+                            <input type="text" id="inputValue"  oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*?)\..*/g, '$1');"  placeholder="%" disabled>
+                        </div>
+                        
+                            
+                          
+                        <div class="row"> <button class="enter" onclick="hesapla()">Hesapla</button></div>
+                       
+                    </div>
+
+                    <div class="col-6 sol" style="background-color:rgb(255, 255, 255); border-radius: 8px;">
+                        <h2 style="color:rgb(99, 71, 255);">Hesaplama Sonucu</h2>
+                        <div class="metin" style="color: rgb(116, 117, 129);"> Sonucu görmek için tutar girip
+                            <span style="color:#131318"> “Hesapla” </span> butonuna basın <br><br>
+                        </div>
+
+                        <div class="hesap">
+                            <div class="row">
+                                <div class="col degisken1" id="content">KDV Hariç Tutar</div>
+                                <div class="col" id="col1"> 
+                                    <span>0,00 tl</span>
+                                </div><br>
+                            </div>
+
+                            <div class="row">
+                                <div class="col">KDV Miktarı</div>
+                                <div class="col" id="col2"> 
+                                    <span>0,00 tl</span>
+                                </div><br><br><hr>
+                            </div>
+
+                            <div class="row">
+                                <div class="col degisken3">KDV Dahil Tutar</div>
+                                    <div class="col" id="col"> 
+                                        <span>0,00 tl</span>
+                                    </div>
+                            </div>
+                                
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+   
+    <script src="https://code.jquery.com/jquery-3.7.0.js"
+        integrity="sha256-JlqSTELeR4TLqP0OG9dxM7yDPqX1ox/HfgiSLBj8+kM=" crossorigin="anonymous"></script>
+</body>
+
+<script>
+    function textChange(obj) {
+        var checkedId = obj.id;
+        if (checkedId == "dahil") {
+            $(".degisken1").text("KDV Dahil Tutar");
+            $(".degisken3").text("KDV Hariç Tutar");
+
+        }else   if (checkedId == "haric") {
+            $(".degisken1").text("KDV Hariç Tutar");
+            $(".degisken3").text("KDV Dahil Tutar");
+        }
+    }
+    /---------Dahil HESAPLAMA FONKSİYONU----------/
+    function Dahil() {
+    var fiyat = parseFloat($("#intValue").val());
+    
+    if ($("#uc_02").val() != "diger") {
+        var kdv = parseFloat($("#uc_02").val());
+
+    }else{
+
+        var kdv = parseFloat($("#inputValue").val());
+      
+
+    }
+    var toplamTutar = fiyat / (1 + kdv /100);
+    console.log(toplamTutar.toFixed(2));
+    console.log(fiyat.toFixed(2));
+    var kdvMiktar =  fiyat - toplamTutar;
+    console.log(kdvMiktar.toFixed(2));
+
+    //ana ekrana yazdırma
+    document.getElementById("col").textContent = toplamTutar.toFixed(2);
+    document.getElementById("col1").textContent = fiyat.toFixed(2);
+    document.getElementById("col2").textContent = kdvMiktar.toFixed(2);
+}
+
+/--------Hariç HESAPLAMA FONKSİYONU-----------/
+
+function Haric() {
+    var brüt = parseFloat($("#intValue").val());
+    
+    if ($("#uc_02").val() != "diger") {
+        var kdv = parseFloat($("#uc_02").val());
+
+    }else{
+
+        var kdv = parseFloat($("#inputValue").val());
+      
+
+    }
+    var fiyat = brüt * (1 + kdv / 100);
+    console.log(kdv.toFixed(2));
+    console.log(fiyat.toFixed(2));
+    var kdvMiktar = fiyat - brüt;
+    console.log(kdvMiktar.toFixed(2));
+    //ana ekrana yazdırma
+    document.getElementById("col").textContent = fiyat.toFixed(2);
+    document.getElementById("col1").textContent = brüt.toFixed(2);
+    document.getElementById("col2").textContent = kdvMiktar.toFixed(2);
+    
+}
+
+
+function hesapla() {
+    $.each($(".form-check-input"), function() {
+           
+            if ($(this).is(':checked')) {
+          
+                return checkbox = $(this).val();
+         
+            
+            }
+        });
+
+var kdvmiktar = $("#uc_02").val();
+
+
+if (checkbox == "Dahil") {
+    Dahil();
+
+}else{
+    Haric();
+}
+
+}
+
+
+
+    
+
+</script>
+<script src="ui-choose.js"></script>
+<script>
+    // 将所有.ui-choose实例化
+    $('.ui-choose').ui_choose();
+    
+    
+    // uc_02 select 单选
+    var uc_02 = $('#uc_02').data('ui-choose');
+    uc_02.click = function(value, item) {
+        console.log('click', value);
+        if (value == "diger") {
+     
+     $("#inputValue").prop("disabled", false);
+     
+   } else {
+     $("#inputValue").prop("disabled", true);
+     $("#inputValue").val("");
+   }
+    };
+    uc_02.change = function(value, item) {
+        console.log('change', value);
+    };
+    
+    
+    </script>
+    <script type="text/javascript">
+    
+      var _gaq = _gaq || [];
+      _gaq.push(['_setAccount', 'UA-36251023-1']);
+      _gaq.push(['_setDomainName', 'jqueryscript.net']);
+      _gaq.push(['_trackPageview']);
+    
+      (function() {
+        var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+        ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+        var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+      })();
+
+      var selectElement = document.getElementById("uc_02");
+    var inputValueElement = document.getElementById("inputValue");
+
+ 
+ 
+     
+    </script>
+    
+</body>
+
+</html>
